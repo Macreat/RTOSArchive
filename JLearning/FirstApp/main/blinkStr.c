@@ -12,7 +12,7 @@ void setPins()
     gpio_config(&io_conf);
 
     gpio_config_t led_conf = {
-        .pin_bit_mask = (1ULL << led) | (1ULL << cled),
+        .pin_bit_mask = (1ULL << led1) | (1ULL << cled) | (1ULL << led2) | (1ULL << led3),
         .mode = GPIO_MODE_OUTPUT};
 
     gpio_config(&led_conf);

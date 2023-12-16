@@ -7,6 +7,7 @@
 
 extern QueueHandle_t buttonQueue;
 extern bool blinking;
+extern int currentLed;
 
 void mainTask(void *pvParameters);
 void IRAM_ATTR buttonPress(void *arg);

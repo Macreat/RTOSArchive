@@ -17,13 +17,14 @@
 #include "driver/ledc.h"
 
 #define button 19
-#define led 26
+#define led1 26
+#define led2 25
+#define led3 33
 #define cled 2
-// #define portTICK_PERIOD_MS 1
 #define ledON 1
 #define ledOFF 0
 
-// Prototipado de funciones
+// function prototype
 void turnOnIndicatorLed(int pin, TickType_t delayTime);
 void setPins(void);
 
