@@ -1,0 +1,57 @@
+[1/7] Building C object esp-idf/main/CMakeFiles/__idf_main.dir/tasks.c.obj
+In file included from C:/Users/MateoAlmeida/Desktop/RstrC/STRchng/JLearning/FirstApp/main/blinkStr.h:13,
+                 from C:/Users/MateoAlmeida/Desktop/RstrC/STRchng/JLearning/FirstApp/main/tasks.h:4,
+                 from C:/Users/MateoAlmeida/Desktop/RstrC/STRchng/JLearning/FirstApp/main/tasks.c:1:
+C:/Espressif/frameworks/esp-idf-v5.1.1/components/driver/deprecated/driver/adc.h:19:2: warning: #warning "legacy adc driver is deprecated, please migrate to use esp_adc/adc_oneshot.h and esp_adc/adc_continuous.h for oneshot mode and continuous mode drivers respectively" [-Wcpp]
+   19 | #warning "legacy adc driver is deprecated, please migrate to use esp_adc/adc_oneshot.h and esp_adc/adc_continuous.h for oneshot mode and continuous mode drivers respectively"
+      |  ^~~~~~~
+C:/Users/MateoAlmeida/Desktop/RstrC/STRchng/JLearning/FirstApp/main/tasks.c:8:1: warning: ignoring attribute 'section (".iram1.1")' because it conflicts with previous 'section (".iram1.0")' [-Wattributes]
+    8 | {
+      | ^
+C:/Users/MateoAlmeida/Desktop/RstrC/STRchng/JLearning/FirstApp/main/tasks.h:12:16: note: previous declaration here
+   12 | void IRAM_ATTR buttonPress(void *arg);
+      |                ^~~~~~~~~~~
+C:/Users/MateoAlmeida/Desktop/RstrC/STRchng/JLearning/FirstApp/main/tasks.c: In function 'mainTask':
+C:/Users/MateoAlmeida/Desktop/RstrC/STRchng/JLearning/FirstApp/main/tasks.c:33:9: warning: unused variable 'buttonState' [-Wunused-variable]
+   33 |     int buttonState;             // redunding
+      |         ^~~~~~~~~~~
+[2/7] Linking C static library esp-idf\main\libmain.a
+[3/7] Generating ld/sections.ld
+[4/7] Linking CXX executable FirstApp.elf
+[5/7] Generating binary image from built executable
+esptool.py v4.7.dev1
+Creating esp32 image...
+Merged 2 ELF sections
+Successfully created esp32 image.
+Generated C:/Users/MateoAlmeida/Desktop/RstrC/STRchng/JLearning/FirstApp/build/FirstApp.bin
+[6/7] cmd.exe /C "cd /D C:\Users\MateoAlmeida\Desktop\RstrC\STRchng\JLearning\FirstApp\build\esp-idf\esptool_py && C:\ESP32\Espressif\python_env\idf5.1_py3.11_env\Scripts\python.exe C:/Espressif/frameworks/esp-idf-v5.1.1/components/partition_table/check_sizes.py --offset 0x8000 partition --type app C:/Users/MateoAlmeida/Desktop/RstrC/STRchng/JLearning/FirstApp/build/partition_table/partition-table.bin C:/Users/MateoAlmeida/Desktop/RstrC/STRchng/JLearning/FirstApp/build/FirstApp.bin"
+FirstApp.bin binary size 0x2d010 bytes. Smallest app partition is 0x100000 bytes. 0xd2ff0 bytes (82%) free.
+[6/7] cmd.exe /C "cd /D C:\Espressif\frameworks\esp-idf-v5.1.1\components\esptool_py && C:\ESP32\Espressif\tools\cmake\3.24.0\bin\cmake.exe -D IDF_PATH=C:/Espressif/frameworks/esp-idf-v5.1.1 -D SERIAL_TOOL=C:/ESP32/Espressif/python_env/idf5.1_py3.11_env/Scripts/python.exe;;C:/Espressif/frameworks/esp-idf-v5.1.1/components/esptool_py/esptool/esptool.py;--chip;esp32 -D SERIAL_TOOL_ARGS=--before=default_reset;--after=hard_reset;write_flash;@app-flash_args -D WORKING_DIRECTORY=C:/Users/MateoAlmeida/Desktop/RstrC/STRchng/JLearning/FirstApp/build -P C:/Espressif/frameworks/esp-idf-v5.1.1/components/esptool_py/run_serial_tool.cmake"
+esptool.py --chip esp32 -p COM5 -b 460800 --before=default_reset --after=hard_reset write_flash --flash_mode dio --flash_freq 40m --flash_size 2MB 0x10000 FirstApp.bin
+esptool.py v4.7.dev1
+Serial port COM5
+Connecting....
+Chip is ESP32-D0WD-V3 (revision v3.1)
+Features: WiFi, BT, Dual Core, 240MHz, VRef calibration in efuse, Coding Scheme None
+Crystal is 40MHz
+MAC: b0:a7:32:23:37:94
+Uploading stub...
+Running stub...
+Stub running...
+Changing baud rate to 460800
+Changed.
+Configuring flash size...
+Flash will be erased from 0x00010000 to 0x0003dfff...
+Compressed 184336 bytes to 101956...
+Writing at 0x00010000... (14 %)
+Writing at 0x0001c7d6... (28 %)
+Writing at 0x000220d5... (42 %)
+Writing at 0x00027e12... (57 %)
+Writing at 0x0002e0e0... (71 %)
+Writing at 0x00035e13... (85 %)
+Writing at 0x0003b9f9... (100 %)
+Wrote 184336 bytes (101956 compressed) at 0x00010000 in 2.4 seconds (effective 606.0 kbit/s)...
+Hash of data verified.
+
+Leaving...
+Hard resetting via RTS pin...
