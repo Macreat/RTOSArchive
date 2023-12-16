@@ -1,12 +1,19 @@
 // Libraries to use
 
 #include <stdio.h>
-#include <stdbool.h>
-#include <unistd.h>
-#include <driver/gpio.h> // to configure GPIOS
+#include <string.h>
+#include <stdlib.h>
+#include <math.h>
+#include "driver/gpio.h"
 #include "freertos/FreeRTOS.h"
-#include "freertos/task.h"  // to tasks
-#include "freertos/queue.h" // to use queues
+#include "freertos/task.h"
+#include "esp_log.h"
+#include "freertos/timers.h"
+#include "driver/adc.h"
+#include "freertos/queue.h"
+#include "driver/uart.h"
+#include "esp_intr_alloc.h"
+#include "driver/ledc.h"
 
 // Definition of GPIO ports
 
@@ -14,117 +21,122 @@
 #define led 26
 #define cled 2
 #define stackSize 1024
-#define RDelay 200
+#define RDelay 500
 
-QueueHandle_t GlobalQueue = 0;
+QueueHandle_t buttonQueue = 0;
 
 // local variable
+
+static const char *TAG = "Button Task";
+extern bool blinking = true;
 int currentLed = 0; // Variable para mantener el estado actual del LED
 
 // prototype functions
-esp_err_t initLed(void);
+void setPins(void);
 esp_err_t initIsr(void);
-esp_err_t createTask(void);
-void stateChange(void *args);
+esp_err_t buttonTask(void *pvParameters);
 void BlinkLed(void *pvParameters);
+void IRAM_ATTR buttonIsrHandler(void *arg);
+/*
+function to set interruption
+*/
+void IRAM_ATTR buttonIsrHandler(void *arg)
+{
+    int buttonState = gpio_get_level(button);
+    xQueueSendFromISR(buttonQueue, &buttonState, NULL);
+}
 /*
 function to set pins
 */
-esp_err_t initLed(void) // función para configurar el LED como salida
+void setPins()
 {
-    gpio_reset_pin(led);                        // Se resetea el GPIO a sus valores predeterminados
-    gpio_set_direction(led, GPIO_MODE_OUTPUT);  // Se indica que el GPIO se va a utilizar como salida
-    gpio_reset_pin(cled);                       // Se resetea el GPIO a sus valores predeterminados
-    gpio_set_direction(cled, GPIO_MODE_OUTPUT); // Se indica que el GPIO se va a utilizar como salida
+    gpio_config_t io_conf = {
+        .pin_bit_mask = (1ULL << button),
+        .mode = GPIO_MODE_INPUT,
+        .intr_type = GPIO_INTR_ANYEDGE,
+        .pull_up_en = GPIO_PULLUP_ENABLE};
 
-    return ESP_OK;
+    gpio_config(&io_conf);
+
+    gpio_config_t led_conf = {
+        .pin_bit_mask = (1ULL << led) | (1ULL << cled),
+        .mode = GPIO_MODE_OUTPUT};
+
+    gpio_config(&led_conf);
+
+    gpio_install_isr_service(0);
+    gpio_isr_handler_add(button, buttonIsrHandler, (void *)button);
 }
+/*
+function to use interruption
+*/
+void turnOnIndicatorLed(int pin, TickType_t delayTime)
+{
+    gpio_set_level(pin, 1);
+    vTaskDelay(delayTime);
+    gpio_set_level(pin, 0);
+}
+
 /*
 function in charge to blink the LED
 */
-void BlinkLed(void *pvParameters) // Función que ejecuta la tarea
+void blinkLed(int pin, bool blink)
 {
-    static bool state = true; // Variable static de tipo bool para varias los estados de funcionamiento
-    while (1)
+    while (blink) // Mientras el botón no se presione
     {
-        int receibedValue = 0;                                                        // Se crea variable para almacenar el valor leido de la cola
-        int lecture = xQueueReceive(GlobalQueue, &receibedValue, pdMS_TO_TICKS(100)); // lecture almacena true o false dependiendo si logra leer un valor o no
 
-        if (lecture) // Si lee un valor (es decir, si al presionar el botón se agregó un valor a la cola)
+        gpio_set_level(pin, 1);
+        vTaskDelay(100 / portTICK_PERIOD_MS); // Encendido durante 100 ms
+        gpio_set_level(pin, 0);
+        vTaskDelay(100 / portTICK_PERIOD_MS); // Apagado durante 100 ms
+        int buttonState = gpio_get_level(button);
+        if (buttonState == 0)
         {
-            state = !state; // cambia el estado
-        }
+            ESP_LOGI(TAG, "Button pressed. Blinking stopped ...");
 
-        // De acuerdo con el estado realiza la respectiva acción
-        switch (state)
-        {
-        case true:
-            gpio_set_level(led, 1);
-            vTaskDelay(pdMS_TO_TICKS(RDelay));
-            gpio_set_level(led, 0);
-            vTaskDelay(pdMS_TO_TICKS(RDelay));
-            break;
-
-        default:
-            gpio_set_level(led, 1);
-            break;
+            break; // blin = false
         }
     }
-}
-/*
-to control the interruption of my button
-*/
-
-esp_err_t initIsr(void) // Configuración e inicialización de las interrupciones
-{
-    gpio_config_t pGPIOConfig;                        // Prototipado de variable de tipo gpio_config_t (lo exigue la librería) utilizada para la posterior configuración
-    pGPIOConfig.pin_bit_mask = (1ULL << button);      // Se cra la mascara del GPIO
-    pGPIOConfig.mode = GPIO_MODE_INPUT;               // Se indica que el GPIO va a estar en modo de entrada
-    pGPIOConfig.pull_up_en = GPIO_PULLUP_ENABLE;      // Se deshabilita el pullup porque se implementó de forma física
-    pGPIOConfig.pull_down_en = GPIO_PULLDOWN_DISABLE; // Se deshabilida el pulldoun por la misma razón anterior
-    pGPIOConfig.intr_type = GPIO_INTR_POSEDGE;        // Se indica qué tipo de interrupción se va a utilizar (rissing/flanco de subida en este caso)
-
-    gpio_config(&pGPIOConfig); // Se carga a la función gpio_config(), la variable pGPIOConfig que fue prototipada anterioremente
-
-    gpio_install_isr_service(0);                     // Se inicia la interrupción 0
-    gpio_isr_handler_add(button, stateChange, NULL); /* Se define cómo va a trabajar la interrupción
-                                                           gpio_isr_handler_add(pin a utilizar, función que va a ejecutar, NULL)*/
-
-    return ESP_OK;
+    gpio_set_level(led, 0);
 }
 /*
 function to configurate tasks
  */
 
-esp_err_t createTask(void) // Función en donde se configuran las tareas
+esp_err_t buttonTask(void *pvParameters)
 {
-    static uint8_t ucParameterToPass; // variable para pasar parámetros a la tarea
-    TaskHandle_t xHandle = NULL;      // Identificador de la tarea, en este caso como es uno solo, lo dejamos NULL
+    int buttonState;
+    bool blink;
+    while (true)
+    {
+        if (xQueueReceive(buttonQueue, &buttonState, portMAX_DELAY))
+        {
+            buttonState == 0 ? (blinking = !blinking,
+                                turnOnIndicatorLed(cled, pdMS_TO_TICKS(1000)), vTaskDelay(1 / portTICK_PERIOD_MS))
+                             : ((void)0, vTaskDelay(1 / portTICK_PERIOD_MS));
 
-    xTaskCreate(BlinkLed, "vTaskR", stackSize, &ucParameterToPass, 1, &xHandle); /*Se crea la tarea con las siguiente caracteristicas
-                                                                                    xTaskCreate(función que va a ejecutar,
-                                                                                                nombre de la tarea,
-                                                                                                tamaño en bit para la tarea,
-                                                                                                parámetro a enviar,
-                                                                                                prioridad,
-                                                                                                identificador)*/
+            do
+            {
+                ESP_LOGI(TAG, "Button pressed...");
+                blinkLed(led, blinking);
+                blink = blinking;
+                int bt = gpio_get_level(button);
+                if (bt == 0)
+                {
+                    blink = false;
+                }
+            } while (blink); // La condición para salir del bucle
 
-    return ESP_OK;
-}
-
-/*
-to send the interruption of my button foward the queue
-*/
-void stateChange(void *args) // esta es la función que va a ejercuar cuando se presente una interrupción
-{
-    int stateButton = gpio_get_level(button);                  // Leer y guarda el estado lógico del LED en state_button
-    xQueueSend(GlobalQueue, &stateButton, pdMS_TO_TICKS(100)); // Agrega a la cola la información del puntero state_button
+            printf("Blinking end...\n");
+            gpio_set_level(led, 0);
+        }
+    }
 }
 // main app
 void app_main(void)
 {
-    GlobalQueue = xQueueCreate(10, sizeof(uint32_t)); // Se crea la cola con espacio para 10 valores y que van a ser de tipo uint32_t
-    initLed();                                        // Se configura el LED
-    initIsr();                                        // Se configuran las interrupciones, en este caso es solamente una
-    createTask();                                     // Crea las tareas
+    setPins();
+    buttonQueue = xQueueCreate(1, sizeof(int));
+
+    xTaskCreate(buttonTask, "button_task", 2048, NULL, 10, NULL);
 }
