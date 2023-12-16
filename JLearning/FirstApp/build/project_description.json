@@ -1,7 +1,7 @@
 {
     "version":            "1",
     "project_name":       "FirstApp",
-    "project_version":    "4be0b9e-dirty",
+    "project_version":    "55bc9f0-dirty",
     "project_path":       "C:/Users/MateoAlmeida/Desktop/RstrC/STRchng/JLearning/FirstApp",
     "idf_path":           "C:/Espressif/frameworks/esp-idf-v5.1.1",
     "build_dir":          "C:/Users/MateoAlmeida/Desktop/RstrC/STRchng/JLearning/FirstApp/build",
