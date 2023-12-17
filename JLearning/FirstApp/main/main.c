@@ -113,16 +113,15 @@ void setPWM()
 }
 /*
 function to use interruption
-*/
-/*
+
 void turnOnIndicatorLed(int pin, TickType_t delayTime)
 {
     gpio_set_level(pin, 1);
     vTaskDelay(delayTime);
     gpio_set_level(pin, 0);
 }
-*/
 
+*/
 /*
 function in charge to change between leds
 */
@@ -138,6 +137,10 @@ void changeLed()
     // turn on only current led
     gpio_set_level(led1 + currentLed, 1);
     turnOn[currentLed] = true;
+    // turn on interruption control led
+    gpio_set_level(cled, 1);
+    vTaskDelay(RDelay);
+    gpio_set_level(cled, 0);
 }
 /*
 function to configurate tasks
@@ -145,30 +148,30 @@ function to configurate tasks
 
 void buttonTask(void *pvParameter)
 {
-    int estado_anterior = 1; // Previous button state (1 = not pressed, 0 = pressed)
-    int contador = 0;        // counter for button task
+    int previousState = 1; // Previous button state (1 = not pressed, 0 = pressed)
+    int counter = 0;       // counter for button task
 
     while (1)
     {
-        int estado_pulsador = gpio_get_level(button);
+        int buttonState = gpio_get_level(button);
 
-        if (estado_pulsador != estado_anterior)
+        if (buttonState != previousState)
         {
             ESP_LOGI("TAG", "Button press... changing led");
 
             vTaskDelay(20 / portTICK_PERIOD_MS); // to evade reboots
 
-            estado_pulsador = gpio_get_level(button);
+            buttonState = gpio_get_level(button);
 
-            if (estado_pulsador != estado_anterior) // Check if the status is stable
+            if (buttonState != previousState) // Check if the status is stable
             {
-                if (estado_pulsador == 0) //  If the button is pressed
+                if (buttonState == 0) //  If the button is pressed
                 {
-                    contador++;
+                    counter++;
 
-                    if (contador >= 4) // If pressed three times, restart the cycle
+                    if (counter >= 3) // If pressed three times, restart the cycle
                     {
-                        contador = 0;
+                        counter = 0;
                         currentLed = 0;
                         changeLed();
                     }
@@ -181,7 +184,7 @@ void buttonTask(void *pvParameter)
             }
         }
 
-        estado_anterior = estado_pulsador; // Update previous button state
+        previousState = buttonState; // Update previous button state
         vTaskDelay(10 / portTICK_PERIOD_MS);
     }
 }
@@ -190,19 +193,19 @@ function to set luminosity in current led
 */
 void setLuminosity(int potValue)
 {
-    int brillo_objetivo = (potValue * 255) / 4095;
-    int brillo_actual = turnOn[currentLed] ? luminosity[currentLed] : 0;
-    int paso = 0;
-    int total_pasos = 50;
+    int BrightnessObjective = (potValue * 255) / 4095;                      // scalling 0 to 255 the shine
+    int actualBrightness = turnOn[currentLed] ? luminosity[currentLed] : 0; // assign luminosity of current led
+    int step = 0;
+    int totalSteps = 50;
 
     // Smooth the shine transition with 50 steps
-    while (paso <= total_pasos)
+    while (step <= totalSteps)
     {
-        int brillo_interpolado = (brillo_actual * (total_pasos - paso) + brillo_objetivo * paso) / total_pasos;
-        luminosity[currentLed] = brillo_interpolado;
-        ledc_set_duty(LEDC_HIGH_SPEED_MODE, LEDC_CHANNEL_0 + currentLed, brillo_interpolado);
+        int interpolatedBrightness = (actualBrightness * (totalSteps - step) + BrightnessObjective * step) / totalSteps;
+        luminosity[currentLed] = interpolatedBrightness;
+        ledc_set_duty(LEDC_HIGH_SPEED_MODE, LEDC_CHANNEL_0 + currentLed, interpolatedBrightness);
         ledc_update_duty(LEDC_HIGH_SPEED_MODE, LEDC_CHANNEL_0 + currentLed);
-        paso++;
+        step++;
         vTaskDelay(10 / portTICK_PERIOD_MS);
     }
 }
@@ -218,10 +221,10 @@ void app_main(void)
 
     while (1)
     {
-        int valor_potenciometro = adc1_get_raw(Pot);
-        setLuminosity(valor_potenciometro);
+        int potVal = adc1_get_raw(Pot);
+        setLuminosity(potVal);
 
-        ESP_LOGI("main", "pottentiometer value: %d", valor_potenciometro);
+        ESP_LOGI("main", "pottentiometer value: %d", potVal);
 
         vTaskDelay(100 / portTICK_PERIOD_MS);
     }
