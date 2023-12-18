@@ -1,15 +1,20 @@
 #ifndef TaskStructure
 #define TaskStructure
 
-#include "blinkStr.h"
+#include "ConfigStr.h"
 
 // prototipado de funciones
 
 extern QueueHandle_t buttonQueue;
 extern bool blinking;
 extern int currentLed;
+extern const char *TAG;
+extern bool turnOn[NLeds];
+extern int luminosity[NLeds];
 
-void mainTask(void *pvParameters);
-void IRAM_ATTR buttonPress(void *arg);
-void blinkLed(int pin, bool blink);
+void IRAM_ATTR buttonIsrHandler(void *arg);
+void changeLed(void);
+void buttonTask(void *pvParameters);
+void getLuminosity(int potValue);
+void setLLuminosity(void);
 #endif

@@ -1,62 +1,119 @@
 #include "tasks.h"
 
-bool blinking = true;
-static const char *TAG = "Button_Task";
 QueueHandle_t buttonQueue;
 int currentLed = 0;
+const char *TAG = "Button task";
+bool turnOn[NLeds] = {false, false, false};
+int luminosity[NLeds] = {0, 0, 0};
 
-void IRAM_ATTR buttonPress(void *arg)
+/*
+function to set interruption
+*/
+void IRAM_ATTR buttonIsrHandler(void *arg)
 {
-
     int buttonState = gpio_get_level(button);
     xQueueSendFromISR(buttonQueue, &buttonState, NULL);
-    vTaskDelay(pdMS_TO_TICKS(10)); // Pequeño retardo para evitar lecturas múltiples del botón
 }
-
-void blinkLed(int pin, bool blink)
+/*
+function in charge to change between leds
+*/
+void changeLed()
 {
-    while (blink)
+    // turn off leds
+    for (int i = 0; i < NLeds; i++)
     {
-        gpio_set_level(pin, ledON);
-        vTaskDelay(100 / portTICK_PERIOD_MS); // Encendido durante 100 ms
-        gpio_set_level(pin, ledOFF);
-        vTaskDelay(100 / portTICK_PERIOD_MS); // Apagado durante 100 ms
-        int currentButtonState = gpio_get_level(button);
-        if (currentButtonState == 0)
+        gpio_set_level(led1 + i, 0);
+        turnOn[i] = false;
+    }
+
+    // turn on only current led
+    gpio_set_level(led1 + currentLed, 1);
+    turnOn[currentLed] = true;
+    // turn on interruption control led
+    gpio_set_level(cled, 1);
+    vTaskDelay(RDelay);
+    gpio_set_level(cled, 0);
+}
+/*
+function to configurate button tasks
+*/
+
+void buttonTask(void *pvParameter)
+{
+    int previousState = 1; // Previous button state (1 = not pressed, 0 = pressed)
+    int counter = 0;       // counter for button task
+
+    while (1)
+    {
+        int buttonState = gpio_get_level(button);
+
+        if (buttonState != previousState)
         {
-            break; // blin = false
+            ESP_LOGI("TAG", "Button press... changing led");
+
+            vTaskDelay(20 / portTICK_PERIOD_MS); // to evade reboots
+
+            buttonState = gpio_get_level(button);
+
+            if (buttonState != previousState) // Check if the status is stable
+            {
+                if (buttonState == 0) //  If the button is pressed
+                {
+                    counter++;
+
+                    if (counter >= 3) // If pressed three times, restart the cycle
+                    {
+                        counter = 0;
+                        currentLed = 0;
+                        changeLed();
+                    }
+                    else // Change to next LED if not pressed three times
+                    {
+                        currentLed = (currentLed + 1) % NLeds;
+                        changeLed();
+                    }
+                }
+            }
         }
+
+        previousState = buttonState; // Update previous button state
+        vTaskDelay(10 / portTICK_PERIOD_MS);
     }
 }
 
-void mainTask(void *pvParameters)
+/*
+function to get luminosity in current led
+*/
+void getLuminosity(int potValue)
 {
-    gpio_install_isr_service(0);
-    gpio_isr_handler_add(button, buttonPress, (void *)button);
-    while (true)
+    int BrightnessObjective = (potValue * 255) / 4095;                      // scalling 0 to 255 the shine
+    int actualBrightness = turnOn[currentLed] ? luminosity[currentLed] : 0; // assign luminosity of current led
+    int step = 0;
+    int totalSteps = 50;
+
+    // Smooth the shine transition with 50 steps
+    while (step <= totalSteps)
     {
-        int estadoButton;
-        int buttonState = xQueueReceive(buttonQueue, &estadoButton, portMAX_DELAY);
-        if (buttonState) // changing to do while;
-        {
-            turnOnIndicatorLed(cled, pdMS_TO_TICKS(1000));
-            // Espera un poco para evitar múltiples detecciones del botón
-            vTaskDelay(pdMS_TO_TICKS(100));
-            currentLed = *((int *)pvParameters);
-            currentLed = (currentLed + 1) % 3;
-            *((int *)pvParameters) = currentLed;
-        }
-        switch (*((int *)pvParameters))
-        {
-        case 0:
-            blinkLed(led1, true);
-            break;
-        case 1:
-            blinkLed(led2, true);
-            break;
-        case 2:
-            blinkLed(led3, true);
-            break;
-        }
+        int interpolatedBrightness = (actualBrightness * (totalSteps - step) + BrightnessObjective * step) / totalSteps;
+        luminosity[currentLed] = interpolatedBrightness;
+        ledc_set_duty(LEDC_HIGH_SPEED_MODE, LEDC_CHANNEL_0 + currentLed, interpolatedBrightness);
+        ledc_update_duty(LEDC_HIGH_SPEED_MODE, LEDC_CHANNEL_0 + currentLed);
+        step++;
+        vTaskDelay(10 / portTICK_PERIOD_MS);
+    }
+}
+/*
+function to set luminosity in current led
+*/
+void setLLuminosity()
+{
+    while (1)
+    {
+        int potVal = adc1_get_raw(Pot);
+        getLuminosity(potVal);
+
+        ESP_LOGI("ADC lecture", "pottentiometer value: %d", potVal);
+
+        vTaskDelay(100 / portTICK_PERIOD_MS);
     }
 }

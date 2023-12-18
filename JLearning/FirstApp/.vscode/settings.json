@@ -18,6 +18,12 @@
         "freertos.h": "c",
         "gpio.h": "c",
         "esp_intr_alloc.h": "c",
-        "ledc.h": "c"
+        "ledc.h": "c",
+        "task.h": "c",
+        "functional": "c",
+        "tasks.h": "c",
+        "stdio.h": "c",
+        "configstr.h": "c",
+        "blinkstr.h": "c"
     }
 }
