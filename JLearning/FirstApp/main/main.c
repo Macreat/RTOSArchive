@@ -9,5 +9,5 @@ void app_main(void)
     setPWM();
     changeLed(); // turn on first led
     xTaskCreate(buttonTask, "Button task", 2048, NULL, 10, NULL);
-    setLLuminosity();
+    setLuminosity();
 }

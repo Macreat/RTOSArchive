@@ -15,7 +15,7 @@ function to configure ADC
 void setADC()
 {
     adc1_config_width(ADC_WIDTH_BIT_12);
-    adc1_config_channel_atten(Pot, ADC_ATTEN_DB_11);
+    adc1_config_channel_atten(NTC, ADC_ATTEN_DB_11);
 }
 /*
 function to configure PWM Channel

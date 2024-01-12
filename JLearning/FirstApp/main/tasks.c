@@ -86,12 +86,12 @@ function to get luminosity in current led
 */
 void getLuminosity(int potValue)
 {
-    int BrightnessObjective = (potValue * 255) / 4095;                      // scalling 0 to 255 the shine
+    int BrightnessObjective = (potValue * 100) / 500;                       // scalling 0 to 255 the shine
     int actualBrightness = turnOn[currentLed] ? luminosity[currentLed] : 0; // assign luminosity of current led
     int step = 0;
-    int totalSteps = 50;
+    int totalSteps = 100;
 
-    // Smooth the shine transition with 50 steps
+    // Smooth the shine transition with 100 steps
     while (step <= totalSteps)
     {
         int interpolatedBrightness = (actualBrightness * (totalSteps - step) + BrightnessObjective * step) / totalSteps;
@@ -105,14 +105,14 @@ void getLuminosity(int potValue)
 /*
 function to set luminosity in current led
 */
-void setLLuminosity()
+void setLuminosity()
 {
     while (1)
     {
-        int potVal = adc1_get_raw(Pot);
-        getLuminosity(potVal);
+        int ntcVal = adc1_get_raw(NTC);
+        getLuminosity(ntcVal);
 
-        ESP_LOGI("ADC lecture", "pottentiometer value: %d", potVal);
+        ESP_LOGI("ADC lecture", "NTC value: %d", ntcVal);
 
         vTaskDelay(100 / portTICK_PERIOD_MS);
     }

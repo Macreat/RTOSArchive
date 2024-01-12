@@ -16,7 +16,7 @@
 #include "esp_intr_alloc.h"
 #include "driver/ledc.h"
 
-#define Pot ADC1_CHANNEL_7
+#define NTC ADC1_CHANNEL_7
 #define button 19
 #define led1 25
 #define led2 26

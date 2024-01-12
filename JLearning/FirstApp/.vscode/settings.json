@@ -24,6 +24,7 @@
         "tasks.h": "c",
         "stdio.h": "c",
         "configstr.h": "c",
-        "blinkstr.h": "c"
+        "blinkstr.h": "c",
+        "string.h": "c"
     }
 }

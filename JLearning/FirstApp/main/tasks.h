@@ -6,7 +6,6 @@
 // prototipado de funciones
 
 extern QueueHandle_t buttonQueue;
-extern bool blinking;
 extern int currentLed;
 extern const char *TAG;
 extern bool turnOn[NLeds];
@@ -16,5 +15,5 @@ void IRAM_ATTR buttonIsrHandler(void *arg);
 void changeLed(void);
 void buttonTask(void *pvParameters);
 void getLuminosity(int potValue);
-void setLLuminosity(void);
+void setLuminosity(void);
 #endif
