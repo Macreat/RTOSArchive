@@ -1,13 +1,13 @@
 #include "ConfigStr.h"
 #include "tasks.h"
 
-// main app
+// main app just controlling state of a different LEDS with an NTC termistor.
 void app_main(void)
 {
     setPins();
     setADC();
     setPWM();
-    changeLed(); // turn on first led
+    changeLed();
     xTaskCreate(buttonTask, "Button task", 2048, NULL, 10, NULL);
     setLuminosity();
 }
