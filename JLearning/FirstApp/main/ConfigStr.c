@@ -1,25 +1,58 @@
 #include "ConfigStr.h"
 
-void setPins()
+QueueHandle_t uart_queue = 0;
+esp_err_t setPins(void)
 {
-    gpio_set_direction(button, GPIO_MODE_INPUT);
-    gpio_set_pull_mode(button, GPIO_PULLUP_ONLY);
+
+    gpio_reset_pin(cled);
+    gpio_set_direction(cled, GPIO_MODE_INPUT);
+
+    gpio_reset_pin(led1);
     gpio_set_direction(led1, GPIO_MODE_OUTPUT);
+    gpio_reset_pin(led2);
     gpio_set_direction(led2, GPIO_MODE_OUTPUT);
+    gpio_reset_pin(led3);
     gpio_set_direction(led3, GPIO_MODE_OUTPUT);
-    gpio_set_direction(cled, GPIO_MODE_OUTPUT);
+    return ESP_OK;
 }
 /*
 function to configure ADC
 */
-void setADC()
+esp_err_t setADC(void)
 {
     adc1_config_width(ADC_WIDTH_BIT_12);
     adc1_config_channel_atten(NTC, ADC_ATTEN_DB_11);
+    ESP_LOGI(tagADC, "ADC configured...");
+    return ESP_OK;
 }
+
+/*
+function to initializate UART port
+*/
+esp_err_t initUart(void) //
+{
+    uart_config_t uart_config = {
+        .baud_rate = 115200,
+        .data_bits = UART_DATA_8_BITS,
+        .flow_ctrl = UART_HW_FLOWCTRL_DISABLE,
+        .parity = UART_PARITY_DISABLE,
+        .source_clk = UART_SCLK_APB,
+        .stop_bits = UART_STOP_BITS_1};
+
+    uart_param_config(UARTNum, &uart_config);
+
+    uart_set_pin(UARTNum, Uart_RX, Uart_TX, UART_PIN_NO_CHANGE, UART_PIN_NO_CHANGE);
+
+    uart_driver_install(UARTNum, stackSize, stackSize, sizeQueueUART, &uart_queue, 0);
+
+    ESP_LOGI(tagUART, "Init uart completed");
+
+    return ESP_OK;
+}
+
 /*
 function to configure PWM Channel
-*/
+
 void setPWM()
 {
     // Configuración del canal PWM
@@ -51,6 +84,7 @@ void setPWM()
         .duty = 0};
     ledc_channel_config(&ledc_conf_3);
 }
+*/
 /*
 function to use interruption
 

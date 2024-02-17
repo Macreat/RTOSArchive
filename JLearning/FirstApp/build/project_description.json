@@ -1,7 +1,7 @@
 {
     "version":            "1",
     "project_name":       "FirstApp",
-    "project_version":    "4b24835-dirty",
+    "project_version":    "8e3886e-dirty",
     "project_path":       "C:/Users/MateoAlmeida/Desktop/RstrC/STRchng/JLearning/FirstApp",
     "idf_path":           "C:/Espressif/frameworks/esp-idf-v5.1.1",
     "build_dir":          "C:/Users/MateoAlmeida/Desktop/RstrC/STRchng/JLearning/FirstApp/build",
@@ -790,7 +790,7 @@
             "managed_reqs": [],
             "managed_priv_reqs": [],
             "file": "C:/Users/MateoAlmeida/Desktop/RstrC/STRchng/JLearning/FirstApp/build/esp-idf/main/libmain.a",
-            "sources": [ "C:/Users/MateoAlmeida/Desktop/RstrC/STRchng/JLearning/FirstApp/main/main.c", "C:/Users/MateoAlmeida/Desktop/RstrC/STRchng/JLearning/FirstApp/main/tasks.c", "C:/Users/MateoAlmeida/Desktop/RstrC/STRchng/JLearning/FirstApp/main/ConfigStr.c", "C:/Users/MateoAlmeida/Desktop/RstrC/STRchng/JLearning/FirstApp/main/tasks.h", "C:/Users/MateoAlmeida/Desktop/RstrC/STRchng/JLearning/FirstApp/main/ConfigStr.h" ],
+            "sources": [ "C:/Users/MateoAlmeida/Desktop/RstrC/STRchng/JLearning/FirstApp/main/tasks.c", "C:/Users/MateoAlmeida/Desktop/RstrC/STRchng/JLearning/FirstApp/main/main.c", "C:/Users/MateoAlmeida/Desktop/RstrC/STRchng/JLearning/FirstApp/main/ConfigStr.c" ],
             "include_dirs": [ "." ]
         },
         "mbedtls": {

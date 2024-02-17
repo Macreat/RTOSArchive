@@ -11,9 +11,14 @@ extern const char *TAG;
 extern bool turnOn[NLeds];
 extern int luminosity[NLeds];
 
-void IRAM_ATTR buttonIsrHandler(void *arg);
-void changeLed(void);
-void buttonTask(void *pvParameters);
-void getLuminosity(int potValue);
-void setLuminosity(void);
+typedef struct
+{
+    char *key;
+    int value;
+} Dict_set_values; // structure for organizate respective UART information
+
+esp_err_t createTask(void);
+void switchLED(void *pvParameters);
+void uartTask(void *pvParameters);
+void getADC(void *pvParameters);
 #endif
