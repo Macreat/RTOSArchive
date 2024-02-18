@@ -1,0 +1,5 @@
+[1/4] cmd.exe /C "cd /D C:\Users\MateoAlmeida\Desktop\RstrC\STRchng\JLearning\FirstApp\build\esp-idf\esptool_py && C:\ESP32\Espressif\python_env\idf5.1_py3.11_env\Scripts\python.exe C:/Espressif/frameworks/esp-idf-v5.1.1/components/partition_table/check_sizes.py --offset 0x8000 partition --type app C:/Users/MateoAlmeida/Desktop/RstrC/STRchng/JLearning/FirstApp/build/partition_table/partition-table.bin C:/Users/MateoAlmeida/Desktop/RstrC/STRchng/JLearning/FirstApp/build/FirstApp.bin"
+FirstApp.bin binary size 0x1214d0 bytes. Smallest app partition is 0x177000 bytes. 0x55b30 bytes (23%) free.
+[2/4] Performing build step for 'bootloader'
+[1/1] cmd.exe /C "cd /D C:\Users\MateoAlmeida\Desktop\RstrC\STRchng\JLearning\FirstApp\build\bootloader\esp-idf\esptool_py && C:\ESP32\Espressif\python_env\idf5.1_py3.11_env\Scripts\python.exe C:/Espressif/frameworks/esp-idf-v5.1.1/components/partition_table/check_sizes.py --offset 0x8000 bootloader 0x1000 C:/Users/MateoAlmeida/Desktop/RstrC/STRchng/JLearning/FirstApp/build/bootloader/bootloader.bin"
+Bootloader binary size 0x6810 bytes. 0x7f0 bytes (7%) free.

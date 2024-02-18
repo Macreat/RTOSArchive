@@ -1,7 +1,7 @@
 {
     "version":            "1",
     "project_name":       "FirstApp",
-    "project_version":    "f89ffc9-dirty",
+    "project_version":    "9bc44e2-dirty",
     "project_path":       "C:/Users/MateoAlmeida/Desktop/RstrC/STRchng/JLearning/FirstApp",
     "idf_path":           "C:/Espressif/frameworks/esp-idf-v5.1.1",
     "build_dir":          "C:/Users/MateoAlmeida/Desktop/RstrC/STRchng/JLearning/FirstApp/build",
@@ -790,7 +790,7 @@
             "managed_reqs": [],
             "managed_priv_reqs": [],
             "file": "C:/Users/MateoAlmeida/Desktop/RstrC/STRchng/JLearning/FirstApp/build/esp-idf/main/libmain.a",
-            "sources": [ "C:/Users/MateoAlmeida/Desktop/RstrC/STRchng/JLearning/FirstApp/main/uartControl.c", "C:/Users/MateoAlmeida/Desktop/RstrC/STRchng/JLearning/FirstApp/main/main.c", "C:/Users/MateoAlmeida/Desktop/RstrC/STRchng/JLearning/FirstApp/main/wifiControl.c" ],
+            "sources": [ "C:/Users/MateoAlmeida/Desktop/RstrC/STRchng/JLearning/FirstApp/main/rgb_led.c", "C:/Users/MateoAlmeida/Desktop/RstrC/STRchng/JLearning/FirstApp/main/wifi_app.c", "C:/Users/MateoAlmeida/Desktop/RstrC/STRchng/JLearning/FirstApp/main/http_server.c", "C:/Users/MateoAlmeida/Desktop/RstrC/STRchng/JLearning/FirstApp/main/main.c", "C:/Users/MateoAlmeida/Desktop/RstrC/STRchng/JLearning/FirstApp/main/NTC.c", "C:/Users/MateoAlmeida/Desktop/RstrC/STRchng/JLearning/FirstApp/main/uart_control.c", "C:/Users/MateoAlmeida/Desktop/RstrC/STRchng/JLearning/FirstApp/main/ButtonTask.c", "C:/Users/MateoAlmeida/Desktop/RstrC/STRchng/JLearning/FirstApp/main/motor_control.c", "C:/Users/MateoAlmeida/Desktop/RstrC/STRchng/JLearning/FirstApp/build/app.css.S", "C:/Users/MateoAlmeida/Desktop/RstrC/STRchng/JLearning/FirstApp/build/app.js.S", "C:/Users/MateoAlmeida/Desktop/RstrC/STRchng/JLearning/FirstApp/build/favicon.ico.S", "C:/Users/MateoAlmeida/Desktop/RstrC/STRchng/JLearning/FirstApp/build/index.html.S", "C:/Users/MateoAlmeida/Desktop/RstrC/STRchng/JLearning/FirstApp/build/jquery-3.3.1.min.js.S" ],
             "include_dirs": [ "." ]
         },
         "mbedtls": {

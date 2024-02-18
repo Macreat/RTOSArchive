@@ -1,0 +1,79 @@
+[1/5] cmd.exe /C "cd /D C:\Users\MateoAlmeida\Desktop\RstrC\STRchng\JLearning\FirstApp\build\esp-idf\esptool_py && C:\ESP32\Espressif\python_env\idf5.1_py3.11_env\Scripts\python.exe C:/Espressif/frameworks/esp-idf-v5.1.1/components/partition_table/check_sizes.py --offset 0x8000 partition --type app C:/Users/MateoAlmeida/Desktop/RstrC/STRchng/JLearning/FirstApp/build/partition_table/partition-table.bin C:/Users/MateoAlmeida/Desktop/RstrC/STRchng/JLearning/FirstApp/build/FirstApp.bin"
+FirstApp.bin binary size 0x1213c0 bytes. Smallest app partition is 0x177000 bytes. 0x55c40 bytes (23%) free.
+[2/5] Performing build step for 'bootloader'
+[1/1] cmd.exe /C "cd /D C:\Users\MateoAlmeida\Desktop\RstrC\STRchng\JLearning\FirstApp\build\bootloader\esp-idf\esptool_py && C:\ESP32\Espressif\python_env\idf5.1_py3.11_env\Scripts\python.exe C:/Espressif/frameworks/esp-idf-v5.1.1/components/partition_table/check_sizes.py --offset 0x8000 bootloader 0x1000 C:/Users/MateoAlmeida/Desktop/RstrC/STRchng/JLearning/FirstApp/build/bootloader/bootloader.bin"
+Bootloader binary size 0x6810 bytes. 0x7f0 bytes (7%) free.
+[2/3] cmd.exe /C "cd /D C:\Espressif\frameworks\esp-idf-v5.1.1\components\esptool_py && C:\ESP32\Espressif\tools\cmake\3.24.0\bin\cmake.exe -D IDF_PATH=C:/Espressif/frameworks/esp-idf-v5.1.1 -D SERIAL_TOOL=C:/ESP32/Espressif/python_env/idf5.1_py3.11_env/Scripts/python.exe;;C:/Espressif/frameworks/esp-idf-v5.1.1/components/esptool_py/esptool/esptool.py;--chip;esp32 -D SERIAL_TOOL_ARGS=--before=default_reset;--after=hard_reset;write_flash;@flash_args -D WORKING_DIRECTORY=C:/Users/MateoAlmeida/Desktop/RstrC/STRchng/JLearning/FirstApp/build -P C:/Espressif/frameworks/esp-idf-v5.1.1/components/esptool_py/run_serial_tool.cmake"
+esptool.py --chip esp32 -p COM6 -b 460800 --before=default_reset --after=hard_reset write_flash --flash_mode dio --flash_freq 40m --flash_size 4MB 0x1000 bootloader/bootloader.bin 0x10000 FirstApp.bin 0x8000 partition_table/partition-table.bin
+esptool.py v4.7.dev1
+Serial port COM6
+Connecting....
+Chip is ESP32-D0WD-V3 (revision v3.1)
+Features: WiFi, BT, Dual Core, 240MHz, VRef calibration in efuse, Coding Scheme None
+Crystal is 40MHz
+MAC: b0:a7:32:23:37:94
+Uploading stub...
+Running stub...
+Stub running...
+Changing baud rate to 460800
+Changed.
+Configuring flash size...
+Flash will be erased from 0x00001000 to 0x00007fff...
+Flash will be erased from 0x00010000 to 0x00131fff...
+Flash will be erased from 0x00008000 to 0x00008fff...
+Compressed 26640 bytes to 16691...
+Writing at 0x00001000... (50 %)
+Writing at 0x0000768a... (100 %)
+Wrote 26640 bytes (16691 compressed) at 0x00001000 in 0.5 seconds (effective 399.1 kbit/s)...
+Hash of data verified.
+Compressed 1184704 bytes to 667356...
+Writing at 0x00010000... (2 %)
+Writing at 0x0001dbca... (4 %)
+Writing at 0x000278f0... (7 %)
+Writing at 0x0002f9b4... (9 %)
+Writing at 0x0003761f... (12 %)
+Writing at 0x0003effb... (14 %)
+Writing at 0x00045c80... (17 %)
+Writing at 0x0004fca2... (19 %)
+Writing at 0x0005f5ed... (21 %)
+Writing at 0x0006c723... (24 %)
+Writing at 0x00079828... (26 %)
+Writing at 0x00081927... (29 %)
+Writing at 0x00086e51... (31 %)
+Writing at 0x00090d46... (34 %)
+Writing at 0x00096726... (36 %)
+Writing at 0x0009c461... (39 %)
+Writing at 0x000a1e29... (41 %)
+Writing at 0x000a72ad... (43 %)
+Writing at 0x000aca2c... (46 %)
+Writing at 0x000b235d... (48 %)
+Writing at 0x000b7d09... (51 %)
+Writing at 0x000bdb83... (53 %)
+Writing at 0x000c338e... (56 %)
+Writing at 0x000c85a1... (58 %)
+Writing at 0x000cdaf0... (60 %)
+Writing at 0x000d2cf0... (63 %)
+Writing at 0x000d83e1... (65 %)
+Writing at 0x000dda94... (68 %)
+Writing at 0x000e322d... (70 %)
+Writing at 0x000e8dc9... (73 %)
+Writing at 0x000ee4cf... (75 %)
+Writing at 0x000f3efe... (78 %)
+Writing at 0x000fa106... (80 %)
+Writing at 0x000ffcb5... (82 %)
+Writing at 0x00105665... (85 %)
+Writing at 0x0010e1a7... (87 %)
+Writing at 0x00116388... (90 %)
+Writing at 0x0011c641... (92 %)
+Writing at 0x0012212b... (95 %)
+Writing at 0x00127b6e... (97 %)
+Writing at 0x0012d2f5... (100 %)
+Wrote 1184704 bytes (667356 compressed) at 0x00010000 in 15.0 seconds (effective 629.8 kbit/s)...
+Hash of data verified.
+Compressed 3072 bytes to 105...
+Writing at 0x00008000... (100 %)
+Wrote 3072 bytes (105 compressed) at 0x00008000 in 0.0 seconds (effective 1108.5 kbit/s)...
+Hash of data verified.
+
+Leaving...
+Hard resetting via RTS pin...
