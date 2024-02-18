@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <title>Temperature Monitor</title>
+    <link rel="stylesheet" href="app.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+</head>
+
+<body>
+    <div class="container">
+        <header>
+            <h1>Temperature Monitor</h1>
+        </header>
+
+        <section id="temperature">
+            <div class="temperature-value">
+                <h2>Temperature Value</h2>
+                <input type="checkbox" id="show_temp" name="check_temp">
+                <label for="show_temp">Show temperature -</label>
+                <label>Value (°C): </label>
+                <span id="msg"></span>
+                <div id="value"></div>
+            </div>
+
+            <div class="temperature-indicator">
+                <h2>Temperature State</h2>
+                <div id="circulo"></div>
+            </div>
+        </section>
+        <hr>
+    </div>
+
+    <script src="app.js" defer></script>
+</body>
+
+</html>
