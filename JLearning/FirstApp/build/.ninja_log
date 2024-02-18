@@ -989,3 +989,15 @@
 8976	9292	7299805008229803	C:/Users/MateoAlmeida/Desktop/RstrC/STRchng/JLearning/FirstApp/build/.bin_timestamp	ac47711db88daa22
 9292	9408	0	esp-idf/esptool_py/CMakeFiles/app_check_size	ba73305d8349b78c
 9292	9408	0	C:/Users/MateoAlmeida/Desktop/RstrC/STRchng/JLearning/FirstApp/build/esp-idf/esptool_py/CMakeFiles/app_check_size	ba73305d8349b78c
+51	163	0	esp-idf/esptool_py/CMakeFiles/app_check_size	ba73305d8349b78c
+51	163	0	C:/Users/MateoAlmeida/Desktop/RstrC/STRchng/JLearning/FirstApp/build/esp-idf/esptool_py/CMakeFiles/app_check_size	ba73305d8349b78c
+58	243	7299166697515689	bootloader-prefix/src/bootloader-stamp/bootloader-build	e1b97ddf742768a
+58	243	7299166697515689	bootloader/bootloader.elf	e1b97ddf742768a
+58	243	7299166697515689	bootloader/bootloader.bin	e1b97ddf742768a
+58	243	7299166697515689	bootloader/bootloader.map	e1b97ddf742768a
+58	243	7299166697515689	C:/Users/MateoAlmeida/Desktop/RstrC/STRchng/JLearning/FirstApp/build/bootloader-prefix/src/bootloader-stamp/bootloader-build	e1b97ddf742768a
+58	243	7299166697515689	C:/Users/MateoAlmeida/Desktop/RstrC/STRchng/JLearning/FirstApp/build/bootloader/bootloader.elf	e1b97ddf742768a
+58	243	7299166697515689	C:/Users/MateoAlmeida/Desktop/RstrC/STRchng/JLearning/FirstApp/build/bootloader/bootloader.bin	e1b97ddf742768a
+58	243	7299166697515689	C:/Users/MateoAlmeida/Desktop/RstrC/STRchng/JLearning/FirstApp/build/bootloader/bootloader.map	e1b97ddf742768a
+243	14502	0	CMakeFiles/flash	3af654e4ebdb5374
+243	14502	0	C:/Users/MateoAlmeida/Desktop/RstrC/STRchng/JLearning/FirstApp/build/CMakeFiles/flash	3af654e4ebdb5374
