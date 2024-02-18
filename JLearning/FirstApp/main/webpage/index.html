@@ -1,40 +1,198 @@
 <!DOCTYPE html>
 <html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0, user-scalable=no"
+    />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <script src="jquery-3.3.1.min.js"></script>
+    <link rel="stylesheet" href="app.css" />
+    <script async src="app.js"></script>
+    <title>ESP32 Udemy Course</title>
+  </head>
 
-<head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
-    <meta name="apple-mobile-web-app-capable" content="yes">
-    <title>Temperature Monitor</title>
-    <link rel="stylesheet" href="app.css">
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-</head>
+  <body>
+    <header class ="title-container">
+     
+      <h1>ESP32 Application Development</h1>
+    </header>
 
-<body>
-    <div class="container">
-        <header>
-            <h1>Temperature Monitor</h1>
-        </header>
-
-        <section id="temperature">
-            <div class="temperature-value">
-                <h2>Temperature Value</h2>
-                <input type="checkbox" id="show_temp" name="check_temp">
-                <label for="show_temp">Show temperature -</label>
-                <label>Value (°C): </label>
-                <span id="msg"></span>
-                <div id="value"></div>
-            </div>
-
-            <div class="temperature-indicator">
-                <h2>Temperature State</h2>
-                <div id="circulo"></div>
-            </div>
-        </section>
-        <hr>
+    <div id ="Led box controll" class="temperature-control-container">
+      <h2>Control de LED por Texto</h2>
+      <input type="text" id="textCommand" placeholder="Escribe RED, GREEN o BLUE">
+      <button onclick="sendLEDTextCommand()">Enviar</button>
+    </div>
+  
+    <div id="OTA" class="temperature-control-container">
+      <h2>ESP32 Firmware Update</h2>
+      <label id="latest_firmware_label">Latest Firmware: </label>
+      <div id="latest_firmware"></div>
+      <input
+        type="file"
+        id="selected_file"
+        accept=".bin"
+        style="display: none"
+        onchange="getFileInfo()"
+      />
+      <div class="buttons">
+        <input
+          type="button"
+          value="Select File"
+          onclick="document.getElementById('selected_file').click();"
+        />
+        <input
+          type="button"
+          value="Update Firmware"
+          onclick="updateFirmware()"
+        />
+      </div>
+      <h4 id="file_info"></h4>
+      <h4 id="ota_update_status"></h4>
     </div>
 
-    <script src="app.js" defer></script>
-</body>
 
+  
+
+    <div id="WiFiConnect" class="temperature-control-container">
+      <h2>ESP32 WiFi Connect</h2>
+      <section>
+        <input
+          id="connect_ssid"
+          type="text"
+          maxlength="32"
+          placeholder="SSID"
+          value=""
+        />
+        <input
+          id="connect_pass"
+          type="password"
+          maxlength="64"
+          placeholder="Password"
+          value=""
+        />
+        <input type="checkbox" onclick="showPassword()" />Show Password
+      </section>
+      <div class="buttons">
+        <input id="connect_wifi" type="button" value="Connect" />
+      </div>
+      <div id="wifi_connect_credentials_errors"></div>
+      <h4 id="wifi_connect_status"></h4>
+    </div>
+    <hr />
+
+    
+    <div id="TEMPERATURE_CONTROL" class="temperature-control-container">
+      <div class="title-container">
+        <h1>TEMPERATRURE STATE CONTROL</h1>
+      </div>
+      
+      <div class="controls-container">
+        <div id="NTC_TemperatueShow" class="NTC_Temperatue_show">
+            <h2>NTC Temperature Monitor</h2>
+            <section>
+              <input
+                type="checkbox"
+                id="show_temp"
+                name="check_temp"
+                value="Show temperature"/>
+              <label for="check_temp">Show temperature -</label>
+              <label>Value: </label> <label id="msg"></label>
+            </section>
+        </div>
+      
+        <div id="NTC_Temperatue" class="NTC_Temperatue_panel">
+            <h2>NTC Temperature state</h2>
+            <section>
+              <div id="circulo"></div>
+            </section>
+        </div>
+      </div>
+    </div>
+    <hr />
+
+    
+    <div id="RGB_Control" class="temperature-control-container">
+      <div class="title-container">
+        <h1>RGB LED CONTROL</h1>
+      </div>
+
+    <div class="control-panel-container">
+      <div id="RGB_Control" class="RGBcontrol_panel">
+        <h2>RGB LED Control</h2>
+        <section>
+            <label for="LEDR">Red:</label>
+            <input id="LEDR" type="range" min="0" max="100" value="0" />
+        </section>
+        <section>
+            <label for="LEDG">Green:</label>
+            <input id="LEDG" type="range" min="0" max="100" value="0" />
+        </section>
+        <section>
+            <label for="LEDB">Blue:</label>
+            <input id="LEDB" type="range" min="0" max="100" value="0" />
+        </section>
+    </div>
+    
+
+
+    
+  
+      <div id="SECOND RGB LED Control" class="LEDControlPanel">
+          <h2>RGB 2nd LED Control</h2>
+          <section>
+            <label for="LEDR2">Red:</label>
+            <input id="LEDR2" type="range" min="0" max="100" value="0" />
+            
+            <label for="LEDG2">Green:</label>
+            <input id="LEDG2" type="range" min="0" max="100" value="0" />
+            
+            <label for="LEDB2">Blue: </label>
+            <input id="LEDB2" type="range" min="0" max="100" value="0" />          </section>
+      </div>
+  </div>
+
+
+<hr class="custom-divider"/>
+
+
+    <div id="BUTTON PANEL CONTROL" class="temperature-control-container">
+      <div class="title-container">
+        <h1>BUTTON PANEL CONTROL </h1>
+      </div>
+
+      
+      <div class="control-panel-container">
+      <div id="ButtonCounters">
+        <h2>Button Press Counters</h2>
+        <div>
+          <input id="button1" type="button" value="Button 1" />
+          <span id="count1">0</span> times pressed
+        </div>
+        <div>
+          <input id="button2" type="button" value="Button 2" />
+          <span id="count2">0</span> times pressed
+        </div>
+      </div>   
+  
+  
+  
+      <div id="ButtonCounters" class="ButtonTaskPanel">
+        <h2>Button Task Counter</h2>
+        <section>
+            <p>Button 1 has been pressed <span id="button1Count">0</span> times.</p>
+            <p>Button 2 has been pressed <span id="button2Count">0</span> times.</p>
+        </section>
+      </div>
+    
+    <hr />
+    
+
+
+
+   
+
+  </body>
+  <html></html>
 </html>
