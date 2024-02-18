@@ -1,0 +1,180 @@
+# Extra-documentación del Proyecto de Monitoreo de Temperatura con ESP32 y Control de LED
+
+## Introducción
+
+Este documento proporciona una descripción detallada del proyecto de monitoreo de temperatura con ESP32 y control de LED. El objetivo principal del proyecto es monitorear la temperatura y controlar el color y la intensidad de los LEDs en función de la temperatura y una función binaria que responde directamente influenciando la frecuencia de impresión de la temperatura en el ambiente.
+
+## Componentes del Proyecto
+
+- ESP32-WROOM: Placa de desarrollo ESP32 utilizada como controlador principal.
+- Sensores de temperatura NTC.
+- LEDs RGB.
+- Comunicación UART para configuración.
+- Resistencias
+- Placa protoboard
+
+## Estructura del Código
+
+El código del proyecto se divide en varios segmentos para una mejor organización y presentación:
+
+- `configure_peripherals.h`: Contiene definiciones de constantes y prototipos de funciones para configurar periféricos.
+- `configure_peripherals.c`: Implementación de funciones para la configuración de periféricos.
+- `tasks.h`: Define constantes y prototipos de funciones relacionados con las tareas del proyecto.
+- `tasks.c`: Implementación de las tareas que monitorean la temperatura, controlan los LEDs y procesan comandos UART.
+- `main.c`: Función `app_main` que inicia el proyecto.
+
+## Funciones Principales :
+
+esp_err_t InitLed(void);
+esp_err_t InitUART(void);
+esp_err_t SetADC(void);
+esp_err_t Tasks(void);
+esp_err_t SetIntensity()
+void GetADC(void *pvParameters);
+void SwLED(void *pvParameters);
+void UartTask(void *pvParameters);
+void ButtonTask(void *pvParameters);
+void IRAM_ATTR ButtonPress(void \* arg);
+void app_main(void);
+
+### `ButtonPress`
+
+/\*\*
+
+- @brief Manejador de interrupciones para el botón.
+-
+- Esta función se activa cuando se presiona el botón. Incrementa la frecuencia actual en 1
+- y la reinicia a 1 si supera 5. Luego, envía la frecuencia actualizada a la tarea principal
+- a través de la cola `ButtonQ`.
+-
+- @param arg Puntero a los argumentos pasados a la función de interrupción (no utilizado aquí).
+  \*/
+
+### `InitLed`:
+
+/\*\*
+
+- @brief Esta función inicializa el controlador del LED como salida PWM.
+-
+- Configura los pines de los LEDs y el control PWM utilizando el controlador LEDC.
+-
+- @return ESP_OK si la inicialización es exitosa, ESP_FAIL si hay un error.
+  \*/
+
+### `SetADC`
+
+/\*\*
+
+- @brief Configura el puerto para el canal ADC y la resolución del conversor ADC.
+-
+- Esta función configura el puerto ADC para la lectura de la temperatura desde los sensores NTC y convierte este valor
+- analógico en digital
+-
+- @return ESP_OK si la configuración del ADC es exitosa, ESP_FAIL si hay un error.
+  \*/
+
+### `InitUART`
+
+/\*\*
+
+- @brief Inicializa el puerto UART para la comunicación con el usuario a través de comandos.
+-
+- Esta función configura el controlador UART con la velocidad de baudios, bits de datos, paridad, bits de parada y otros
+- parámetros especificados en la estructura `uart_config`. También configura los pines del transmisor y el receptor UART.
+-
+- @return ESP_OK si la inicialización es exitosa, ESP_FAIL si hay un error.
+  \*/
+
+### `SwLED`
+
+/\*\*
+
+- @brief Tarea para controlar los LEDs basándose en la temperatura y comandos UART.
+-
+- Esta función recibe temperaturas de la cola `ADCLQ` y comandos de la cola `SetValuesQ`
+- para controlar la intensidad de los LEDs según las temperaturas registradas y los límites configurados.
+-
+- @param pvParameters Puntero a los parámetros pasados a la tarea (no utilizado en esta función).
+  \*/
+  Esta tarea se encarga de controlar el color de los LEDs en función de la temperatura leída y los límites establecidos.
+
+### `UartTask`
+
+/\*\*
+
+- @brief Tarea para detectar, procesar y almacenar comandos UART para configurar los límites
+- y la intensidad de los LEDs.
+-
+- Esta función recibe comandos UART, los interpreta y realiza acciones correspondientes
+- como ajustar la intensidad del LED.
+-
+- @param pvParameters Puntero a los parámetros pasados a la tarea (no utilizado aquí).
+  \*/
+  Tarea encargada de detectar, procesar y almacenar comandos UART para configurar los límites y la intensidad de los LEDs.
+
+### `GetADC`
+
+/\*\*
+
+- @brief Tarea para obtener lecturas del ADC y calcular la temperatura, la cual se envía mediante una cola.
+-
+- Esta función obtiene lecturas del ADC, calcula la temperatura utilizando un termistor
+- y envía la temperatura a la cola `ADCLQ` para su procesamiento.
+-
+- @param pvParameters Puntero a los parámetros pasados a la tarea (no utilizado aquí).
+  \*/
+
+### `ButtonTask`
+
+/\*\*
+
+- @brief Tarea para configurar el botón como pin de entrada para manejar las interrupciones del botón con éxito.
+-
+- Esta función se activa cuando se presiona el botón : cambiando la frecuencia de impresión por pantalla.
+-
+- @param pvParameters Puntero a los parámetros pasados a la tarea (no utilizado aquí).
+  \*/
+
+### `Tasks`
+
+/\*\*
+
+- @brief Crea las tareas en el sistema operativo.
+-
+- Esta función crea las tareas necesarias para el funcionamiento del sistema.
+-
+- @return ESP_OK si la creación de tareas es exitosa, ESP_FAIL si hay un error.
+  \*/
+
+### `SetIntensity`
+
+/\*\*
+
+- @brief Establece la intensidad del LED.
+-
+- @param channel Canal del LED.
+- @param intensity Intensidad del LED en porcentaje (de 10 a 100).
+- @return ESP_OK si la configuración es válida, ESP_FAIL si hay un error.
+  \*/
+
+### `app_main`
+
+/\*\*
+
+- @brief Función principal que inicializa las colas y crea las tareas necesarias para la ejecución del programa.
+  \*/
+
+## Configuración UART
+
+Se pueden enviar comandos UART para configurar los límites de temperatura y la intensidad de los LEDs. Los comandos válidos son:
+
+- `LED_R_MAX=NUM`: Configura el límite máximo de temperatura para el LED Rojo.
+- `LED_R_MIN=NUM`: Configura el límite mínimo de temperatura para el LED Rojo.
+- `LED_G_MAX=NUM`: Configura el límite máximo de temperatura para el LED Verde.
+- `LED_G_MIN=NUM`: Configura el límite mínimo de temperatura para el LED Verde.
+- `LED_B_MAX=NUM`: Configura el límite máximo de temperatura para el LED Azul.
+- `LED_B_MIN=NUM`: Configura el límite mínimo de temperatura para el LED Azul.
+
+## Conclusiones
+
+Este proyecto demuestra la avanzada capacidad de monitorear la temperatura y ajustar LEDs según las condiciones térmicas mediante un ESP32. La comunicación UART posibilita la configuración instantánea y dinámica de los límites e intensidad de cada LED RGB, permitiendo un control exacto y adaptable que se ajusta con precisión a las variaciones del entorno y las condiciones del usuario.
