@@ -1,0 +1,45 @@
+[1/10] Performing build step for 'bootloader'
+[1/1] cmd.exe /C "cd /D C:\Users\MateoAlmeida\Desktop\RstrC\STRchng\JLearning\FirstApp\build\bootloader\esp-idf\esptool_py && C:\ESP32\Espressif\python_env\idf5.1_py3.11_env\Scripts\python.exe C:/Espressif/frameworks/esp-idf-v5.1.1/components/partition_table/check_sizes.py --offset 0x8000 bootloader 0x1000 C:/Users/MateoAlmeida/Desktop/RstrC/STRchng/JLearning/FirstApp/build/bootloader/bootloader.bin"
+Bootloader binary size 0x6810 bytes. 0x7f0 bytes (7%) free.
+[2/8] Building C object esp-idf/main/CMakeFiles/__idf_main.dir/main.c.obj
+C:/Users/MateoAlmeida/Desktop/RstrC/STRchng/JLearning/FirstApp/main/main.c: In function 'app_main':
+C:/Users/MateoAlmeida/Desktop/RstrC/STRchng/JLearning/FirstApp/main/main.c:43:17: warning: passing argument 1 of 'xTaskCreate' from incompatible pointer type [-Wincompatible-pointer-types]
+   43 |     xTaskCreate(send_time_UART, "update_time", STACK_SIZE * 3, ucParameterToPass, 5, &xHandle);
+      |                 ^~~~~~~~~~~~~~
+      |                 |
+      |                 void (*)(void)
+In file included from C:/Users/MateoAlmeida/Desktop/RstrC/STRchng/JLearning/FirstApp/main/wifiControl.h:7,
+                 from C:/Users/MateoAlmeida/Desktop/RstrC/STRchng/JLearning/FirstApp/main/main.c:2:
+C:/Espressif/frameworks/esp-idf-v5.1.1/components/freertos/FreeRTOS-Kernel/include/freertos/task.h:588:44: note: expected 'TaskFunction_t' {aka 'void (*)(void *)'} but argument is of type 'void (*)(void)'
+  588 |     BaseType_t xTaskCreate( TaskFunction_t pxTaskCode,
+      |                             ~~~~~~~~~~~~~~~^~~~~~~~~~
+C:/Users/MateoAlmeida/Desktop/RstrC/STRchng/JLearning/FirstApp/main/main.c:43:64: warning: passing argument 4 of 'xTaskCreate' makes pointer from integer without a cast [-Wint-conversion]
+   43 |     xTaskCreate(send_time_UART, "update_time", STACK_SIZE * 3, ucParameterToPass, 5, &xHandle);
+      |                                                                ^~~~~~~~~~~~~~~~~
+      |                                                                |
+      |                                                                uint8_t {aka unsigned char}
+C:/Espressif/frameworks/esp-idf-v5.1.1/components/freertos/FreeRTOS-Kernel/include/freertos/task.h:591:42: note: expected 'void * const' but argument is of type 'uint8_t' {aka 'unsigned char'}
+  591 |                             void * const pvParameters,
+      |                             ~~~~~~~~~~~~~^~~~~~~~~~~~
+In file included from C:/Users/MateoAlmeida/Desktop/RstrC/STRchng/JLearning/FirstApp/main/main.c:3:
+C:/Users/MateoAlmeida/Desktop/RstrC/STRchng/JLearning/FirstApp/main/uartControl.h: At top level:
+C:/Users/MateoAlmeida/Desktop/RstrC/STRchng/JLearning/FirstApp/main/uartControl.h:10:20: warning: 'tag' defined but not used [-Wunused-variable]
+   10 | static const char *tag = "UART EVENT";
+      |                    ^~~
+[3/8] Building C object esp-idf/main/CMakeFiles/__idf_main.dir/uartControl.c.obj
+In file included from C:/Users/MateoAlmeida/Desktop/RstrC/STRchng/JLearning/FirstApp/main/uartControl.h:4,
+                 from C:/Users/MateoAlmeida/Desktop/RstrC/STRchng/JLearning/FirstApp/main/uartControl.c:1:
+C:/Users/MateoAlmeida/Desktop/RstrC/STRchng/JLearning/FirstApp/main/wifiControl.h:30:20: warning: 'TAG' defined but not used [-Wunused-variable]
+   30 | static const char *TAG = "example";
+      |                    ^~~
+[4/8] Linking C static library esp-idf\main\libmain.a
+[5/8] Generating ld/sections.ld
+[6/8] Linking CXX executable FirstApp.elf
+[7/8] Generating binary image from built executable
+esptool.py v4.7.dev1
+Creating esp32 image...
+Merged 25 ELF sections
+Successfully created esp32 image.
+Generated C:/Users/MateoAlmeida/Desktop/RstrC/STRchng/JLearning/FirstApp/build/FirstApp.bin
+[8/8] cmd.exe /C "cd /D C:\Users\MateoAlmeida\Desktop\RstrC\STRchng\JLearning\FirstApp\build\esp-idf\esptool_py && C:\ESP32\Espressif\python_env\idf5.1_py3.11_env\Scripts\python.exe C:/Espressif/frameworks/esp-idf-v5.1.1/components/partition_table/check_sizes.py --offset 0x8000 partition --type app C:/Users/MateoAlmeida/Desktop/RstrC/STRchng/JLearning/FirstApp/build/partition_table/partition-table.bin C:/Users/MateoAlmeida/Desktop/RstrC/STRchng/JLearning/FirstApp/build/FirstApp.bin"
+FirstApp.bin binary size 0xc33e0 bytes. Smallest app partition is 0x100000 bytes. 0x3cc20 bytes (24%) free.
