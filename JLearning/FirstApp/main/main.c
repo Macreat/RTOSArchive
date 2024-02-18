@@ -1,14 +1,13 @@
 #include "ConfigStr.h"
 #include "tasks.h"
 
-extern QueueHandle_t ADCLecture;     // Se crea variable para la cola de lectura del ADC, indicando que se está tomando de un archivo externo
-extern QueueHandle_t SetValuesQueue; // Se crea variable para la cola en donde se almacenan los límites ingresados por UART, indicando que se está tomando de un archivo externo
-
+extern QueueHandle_t ADCLecture;     // Variable is created for the ADC read queue, indicating that it is being taken from an external file
+extern QueueHandle_t SetValuesQueue; // A variable is created for the queue where the limits entered by UART are stored, indicating that it is being taken from an external file
 // main app just controlling state of a different LEDS with an NTC termistor.
 void app_main(void)
 {
-    ADCLecture = xQueueCreate(10, sizeof(float));              // Se crea la cola de 10 espacios y valores de tipo flotante
-    SetValuesQueue = xQueueCreate(6, sizeof(Dict_set_values)); // Se cree la cola de 6 espacios con valores de tipo Dict_set_values (ESTRUCTURA CREADA)
+    ADCLecture = xQueueCreate(10, sizeof(float));              // The queue of 10 spaces and floating type values ​​is created
+    SetValuesQueue = xQueueCreate(6, sizeof(Dict_set_values)); // The queue of 6 spaces is created with values ​​of type Dict_set_values ​​(STRUCTURE CREATED)
 
     setPins();
     setADC();
