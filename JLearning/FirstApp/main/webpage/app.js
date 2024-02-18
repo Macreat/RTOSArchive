@@ -75,9 +75,6 @@ $(document).ready(function () {
 	$("#LEDR, #LEDG, #LEDB").on("change", function() {
         checkValuesRGB();
     });
-	$("#LEDR2, #LEDG2, #LEDB2").on("change", function() {
-        checkValuesRGB2();
-    });
 });
 
 /**
@@ -360,57 +357,12 @@ function setValuesRGB(value_R, value_G, value_B) {
 }
 
 
-function setValuesRGB2(value_R2, value_G2, value_B2) {
-	value_R2 = $("#LEDR2").val();
-	value_G2 = $("#LEDG2").val();
-	value_B2 = $("#LEDB2").val();
-
-	// Create an object to hold the data to be sent in the request body
-	var requestData_RGB = {
-		'value_R2': value_R2,
-		'value_G2': value_G2,
-		'value_B2': value_B2,
-		'timestamp': Date.now()
-	};
-
-	// Serialize the data object to JSON
-	var requestDataRGBJSON = JSON.stringify(requestData_RGB);
-
-	console.log(requestDataRGBJSON);
-
-	$.ajax({
-		url: '/setRGB2.json',
-		dataType: 'json',
-		method: 'POST',
-		cache: false,
-		data: requestDataRGBJSON, // Send the JSON data in the request body
-		contentType: 'application/json', // Set the content type to JSON
-		success: function (response) {
-			// Handle the success response from the server
-			console.log(response);
-		},
-		error: function (xhr, status, error) {
-			// Handle errors
-			console.error(xhr.responseText);
-		}
-	});
-}
-
-
 function checkValuesRGB() {
     var value_R = $("#LEDR").val();
     var value_G = $("#LEDG").val();
     var value_B = $("#LEDB").val();
 
     setValuesRGB(value_R, value_G, value_B);
-}
-
-function checkValuesRGB2() {
-    var value_R2 = $("#LEDR2").val();
-    var value_G2 = $("#LEDG2").val();
-    var value_B2 = $("#LEDB2").val();
-
-    setValuesRGB2(value_R2, value_G2, value_B2);
 }
 
 
@@ -448,20 +400,18 @@ function sendRGBCommand(r, g, b) {
     });
 }
 
-function sendLEDTextCommand() {
-	const colorText = document.getElementById('textCommand').value.toUpperCase();
-  
-	if (['RED', 'GREEN', 'BLUE'].includes(colorText)) {
-	  // Enviar solicitud al servidor ESP32
-	  fetch('/text-command', {
-		method: 'POST',
-		headers: { 'Content-Type': 'application/json' },
-		body: JSON.stringify({ color: colorText })
-	  })
-	  .then(response => response.text())
-	  .then(data => console.log(data))
-	  .catch(error => console.error('Error:', error));
-	} else {
-	  alert('Por favor, introduce RED, GREEN o BLUE.');
-	}
-  }
+function abrirMotores() {
+    // Realizar solicitud para abrir motores
+    fetch('/motorAYBabrir')
+        .then(response => response.text())
+        .then(data => console.log(data))
+        .catch(error => console.error('Error:', error));
+}
+
+function cerrarMotores() {
+    // Realizar solicitud para cerrar motores
+    fetch('/motorAYBcerrar')
+        .then(response => response.text())
+        .then(data => console.log(data))
+        .catch(error => console.error('Error:', error));
+}
